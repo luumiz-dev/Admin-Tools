@@ -1,0 +1,43 @@
+on join:
+    wait 1 second
+    if {lootcraft.downtime.reward.toggle} is true:
+        set {_getReward1} to false
+        set {_getReward2} to false
+
+        set {_count} to 1
+        loop {lootcraft.downtime.reward.uuid::*}:
+            if uuid of player is "%{lootcraft.downtime.reward.uuid::%{_count}%}%":
+                stop
+            add 1 to {_count}
+        set {_getReward1} to true
+        add uuid of player to {lootcraft.downtime.reward.uuid::*}
+
+        set {_ip} to IP address of the player
+        set {_count} to 1
+        loop {lootcraft.downtime.reward.ip::*}:
+            if "%{lootcraft.downtime.reward.ip::%{_count}%}%" is "%{_ip}%":
+                stop
+            add 1 to {_count}
+        set {_getReward2} to true
+        add Ip address of player to {lootcraft.downtime.reward.ip::*}
+
+        if {_getReward1} is true:
+            if {_getReward2} is true:
+                wait 5 seconds
+                make console execute "crates key elemental %player%"
+                send "&6&l> &6We appologize about the server downtime. You are given 1 Elemental Key. Thanks for supporting LootCraft!"
+
+command /downtimereward:
+    permission: minecraft.op
+    trigger:
+        if {lootcraft.downtime.reward.toggle} is not set:
+            set {lootcraft.downtime.reward.toggle} to true
+        if {lootcraft.downtime.reward.toggle} is false:
+            set {lootcraft.downtime.reward.toggle} to true
+            send "&6&l> &6Players will now recieve downtime rewards upon login." to player
+        else if {lootcraft.downtime.reward.toggle} is true:
+            clear {lootcraft.downtime.reward.uuid::*}
+            clear {lootcraft.downtime.reward.ip::*}
+            set {lootcraft.downtime.reward.toggle} to false
+            send "&6&l> &6Players will no longer recieve downtime rewards upon login." to player
+            send "&6&l> &6Stored data on who got keys has been cleared." to player

@@ -1,0 +1,70 @@
+on load:
+    set {betterannouncer.nextAnnouncement} to 1
+    set {betterannouncer.isEditing} to false
+
+    if directory "plugins/Skript/BetterAnnouncer" is missing:
+        create directory "plugins/Skript/BetterAnnouncer"
+    if file "plugins/Skript/BetterAnnouncer/announcements.yml" is missing:
+        create file "plugins/Skript/BetterAnnouncer/announcements.yml"
+    wait 1 second 
+    load yml "plugins/Skript/BetterAnnouncer/announcements.yml" as "plugins/Skript/BetterAnnouncer/announcements.yml"
+
+
+every 900 seconds in "world":        
+    if {betterannouncer.isEditing} is false:
+        if size of {betterannouncer.list::*} is not 0:
+            if "%{betterannouncer.list::%{betterannouncer.nextAnnouncement}%}%" is "<none>":
+                set {betterannouncer.nextAnnouncement} to 1
+            broadcast "&f[&6&lL&e&lC&f]&e %{betterannouncer.list::%{betterannouncer.nextAnnouncement}%}%"
+            set {_x} to {betterannouncer.nextAnnouncement} + 1
+            if {_x} is greater than size of {betterannouncer.list::*}:
+                set {betterannouncer.nextAnnouncement} to 1
+            else:
+                add 1 to {betterannouncer.nextAnnouncement}
+
+
+command /betterannouncer <text> [<text>]:
+    permission: lootcraft.announcer.edit
+    trigger:
+        if arg-1 is "list":
+            if size of {betterannouncer.list::*} is equal to 0:
+                send "&6&l> &7There are no announcements being ran currently. Use /announcer add"
+            else if {betterannouncer.list::*} is not set:
+                send "&6&l> &7There are no announcements being ran currently. Use /announcer add"
+            else:
+                set {_count} to 1
+                loop {betterannouncer.list::*}:
+                    send "%{_count}%: %{betterannouncer.list::%{_count}%}%"
+                    add 1 to {_count}
+        else if arg-1 is "add":
+            set {betterannouncer.isEditing} to true
+            set {_newAnnouncement} to arg-2
+            add "%{_newAnnouncement}%" to {betterannouncer.list::*}
+            set yaml value "Announcement.%{_count}%" from "plugins/Skript/BetterAnnouncer/announcements.yml" to {betterannouncer.tempList::%{_count}%}
+            send "&6&l> &7Added to announcements!"
+        else if arg-1 is "remove":
+            if size of {betterannouncer.list::*} is equal to 1:
+                clear {betterannouncer.list::*}
+                send "&6&l> &7Removed from announcements!"
+            else if {betterannouncer.list::*} is not set:
+                send "&6&l> &7There are no announcements being ran currently. Use /announcer add"
+            else:
+                remove "%{betterannouncer.list::%arg-2%}%" from {betterannouncer.list::*}
+
+                set {betterannouncer.tempList::*} to {betterannouncer.list::*}
+                clear {betterannouncer.list::*}
+                set {_count} to 1
+                loop {betterannouncer.tempList::*}:
+                    if {betterannouncer.tempList::%{_count}%} is not "<none>":
+                        add {betterannouncer.tempList::%{_count}%} to {betterannouncer.list::*}
+                        set yaml value "Announcement.%{_count}%" from "plugins/Skript/BetterAnnouncer/announcements.yml" to {betterannouncer.tempList::%{_count}%}
+                    add 1 to {_count}
+
+                send "&6&l> &7Removed from announcements!"
+                set {betterannouncer.isEditing} to false
+        else if arg-1 is "stop":
+            set {betterannouncer.isEditing} to true
+            send "&6&l> &7Announcer stopped."
+        else if arg-1 is "start":
+            set {betterannouncer.isEditing} to false
+            send "&6&l> &7Announcer started."
