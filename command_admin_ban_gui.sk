@@ -1,0 +1,362 @@
+#
+# Staff Tool - Punishment GUI - Created by LuuMiz
+#
+# Required: Skript, SKQuery
+#           Essentials, AdvancedBan
+#
+# Allows for staff members to easily mute, jail, temp ban, and ban players.
+# Allows admins to choose to annouce bans to chat for all players to see.
+# Shows punishment history for an individual player which includes reason, date, staff member who punished.
+# Logs ALL punishments to a server file for safe keeping. Not using SkEnt, just txt file.
+# Change permissions to the correct staff ranks
+#   Admins should only be able to public ban
+#   Helpers should only have access to mute commands
+#   Etc.
+#
+
+# #######################################################################################################
+#                           MAIN GUI WINDOW                                                             #
+# #######################################################################################################
+
+command /adminpunish <offlinePlayer> [<boolean>]:
+    permission: group.moderator
+    aliases:/aap
+    trigger:
+        wait 3 ticks
+        open chest with 1 row named "&4&l&nPlayer Punishment" to player
+        wait 1 tick
+        set {_aapslot} to 0
+        loop 9 times:
+            format slot {_aapslot} of player with gray stained glass pane named "&6" to be unstealable
+            add 1 to {_aapslot}
+
+        set {punishment_gui_%player%} to true
+
+        if arg-2 is not set:
+            format slot 0 of player with glowing red wool named "&4Public Punishment" to close then run [execute player command "/adminpublictrue %arg 1%"]
+            format slot 2 of player with glowing conduit named "&eMute %arg 1%" to close then run [execute player command "/adminmute %arg 1%"]
+            format slot 4 of player with glowing conduit named "&6Jail %arg 1%" to close then run [execute player command "/adminjail %arg 1%"]
+            format slot 6 of player with glowing conduit named "&cBan %arg 1%" to close then run [execute player command "/adminbaniporplayer %arg 1%"]
+            format slot 8 of player with glowing player head named "&7%arg 1% Punishment History" to close then run [execute player command "/adminphistory %arg 1%"]
+        else if arg-2 is false:
+            format slot 0 of player with red wool named "&4Public Punishment" to close then run [execute player command "/adminpublictrue %arg 1%"]
+            format slot 2 of player with conduit named "&eMute %arg 1%" to close then run [execute player command "/adminmute %arg 1%"]
+            format slot 4 of player with conduit named "&6Jail %arg 1%" to close then run [execute player command "/adminjail %arg 1%"]
+            format slot 6 of player with conduit named "&cBan %arg 1%" to close then run [execute player command "/adminbaniporplayer %arg 1%"]
+            format slot 8 of player with player head named "&7%arg 1% Punishment History" to close then run [execute player command "/adminphistory %arg 1%"]
+        else if arg-2 is true:
+            format slot 0 of player with green wool named "&2Public Punishment" to close then run [execute player command "/adminpublicfalse %arg 1%"]
+            format slot 2 of player with conduit named "&eMute %arg 1%" to close then run [execute player command "/adminmute %arg 1% true"]
+            format slot 4 of player with conduit named "&6Jail %arg 1%" to close then run [execute player command "/adminjail %arg 1% true"]
+            format slot 6 of player with conduit named "&cBan %arg 1%" to close then run [execute player command "/adminbaniporplayer %arg 1% true"]
+            format slot 8 of player with player head named "&7%arg 1% Punishment History" to close then run [execute player command "/adminphistory %arg 1%"]
+
+
+# #######################################################################################################
+#                           Start of GUI to choose Player Ban or IP Ban                                 #
+# #######################################################################################################
+
+command /adminbaniporplayer <offlinePlayer> [<boolean>]:
+    permission: group.moderator
+    trigger:
+        if arg-2 is not set:
+            wait 3 ticks
+            open chest with 1 row named "&4&l&nIP Ban or Player Ban?" to player
+            wait 1 tick
+            set {_muteslot} to 0
+            loop 9 times:
+                format slot {_muteslot} of player with gray stained glass pane named "&6" to be unstealable
+                add 1 to {_muteslot}
+            format slot 3 of player with iron ingot named "&6Player Ban" to close then run [execute player command "/adminban %arg 1% false player"]
+            format slot 5 of player with gold ingot named "&cIP Ban" to close then run [execute player command "/adminban %arg 1% false ip"]
+        if arg-2 is false:
+            wait 3 ticks
+            open chest with 1 row named "&4&l&nIP Ban or Player Ban?" to player
+            wait 1 tick
+            set {_muteslot} to 0
+            loop 9 times:
+                format slot {_muteslot} of player with gray stained glass pane named "&6" to be unstealable
+                add 1 to {_muteslot}
+            format slot 3 of player with iron ingot named "&6Player Ban" to close then run [execute player command "/adminban %arg 1% false player"]
+            format slot 5 of player with gold ingot named "&cIP Ban" to close then run [execute player command "/adminban %arg 1% false ip"]
+        if arg-2 is true:
+            wait 3 ticks
+            open chest with 1 row named "&4&l&nIP Ban or Player Ban?" to player
+            wait 1 tick
+            set {_muteslot} to 0
+            loop 9 times:
+                format slot {_muteslot} of player with gray stained glass pane named "&6" to be unstealable
+                add 1 to {_muteslot}
+            format slot 3 of player with iron ingot named "&6Player Ban" to close then run [execute player command "/adminban %arg 1% true player"]
+            format slot 5 of player with gold ingot named "&cIP Ban" to close then run [execute player command "/adminban %arg 1% true ip"]
+
+# #######################################################################################################
+#                           End of GUI to choose Player Ban or IP Ban                                   #
+# #######################################################################################################
+
+
+# #######################################################################################################
+#                           Start of Mute, Jail, Ban GUI Windows                                        #
+# #######################################################################################################
+command /adminpublictrue <offlinePlayer>:
+    permission: minecraft.op    #admin+
+    trigger:
+        wait 3 ticks
+        set {punishment_gui_%player%} to true
+        execute player command "/adminpunish %arg 1% true"
+
+command /adminpublicfalse <offlinePlayer>:
+    permission: minecraft.op    #admin+
+    trigger:
+        wait 3 ticks
+        set {punishment_gui_%player%} to true
+        execute player command "/adminpunish %arg 1% false"
+
+command /adminannounce <offlinePlayer> <text>:
+    permission: minecraft.op    #admin+
+    trigger:
+        set {punishment_gui_%player%} to true
+        broadcast "&c&l%arg 1% was %arg 2%"
+
+command /adminmute <offlinePlayer> [<boolean>]:
+    permission: group.moderator
+    trigger:
+        #need to wait here for close inv animation to finish from previous gui
+        wait 3 ticks
+
+        set {punishment_gui_%player%} to true
+
+        open chest with 1 row named "&4&l&nReason to Mute" to player
+        wait 1 tick
+        set {_muteslot} to 0
+        loop 9 times:
+            format slot {_muteslot} of player with gray stained glass pane named "&6" to be unstealable
+            add 1 to {_muteslot}
+        if arg-2 is true:
+            format slot 1 of player with snowball named "&eHeated Arguments" with lore "&65 minutes" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 5m Arguments"]->[execute player command "/adminannounce %arg 1% muted for Arguing too much"]->[execute player command "/adminaddmute %arg 1% Arguments"]
+            format slot 2 of player with snowball named "&eSpamming" with lore "&610 minutes" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 10m Spamming"]->[execute player command "/adminannounce %arg 1% muted for Spamming"]->[execute player command "/adminaddmute %arg 1% Spamming"]
+            format slot 3 of player with snowball named "&eHate Speech" with lore "&62 hours" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 1h HateSpeech"]->[execute player command "/adminannounce %arg 1% muted for Racism/Hate Speech"]->[execute player command "/adminaddmute %arg 1% Hate Speech"]
+            format slot 4 of player with snowball named "&eAdvertising" with lore "&630 minutes" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 30m Advertising"]->[execute player command "/adminannounce %arg 1% muted for Advertising"]->[execute player command "/adminaddmute %arg 1% Advertising"]
+            format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+        else:
+            format slot 1 of player with snowball named "&eHeated Arguments" with lore "&65 minutes" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 5m Arguments"]->[execute player command "/adminaddmute %arg 1% Arguments"]
+            format slot 2 of player with snowball named "&eSpamming" with lore "&610 minutes" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 10m Spamming"]->[execute player command "/adminaddmute %arg 1% Spamming"]
+            format slot 3 of player with snowball named "&eHate Speech" with lore "&62 hours" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 1h HateSpeech"]->[execute player command "/adminaddmute %arg 1% Hate Speech"]
+            format slot 4 of player with snowball named "&eAdvertising" with lore "&630 minutes" to close then run [close player's inventory]->[execute player command "/tempmute %arg 1% 30m Advertising"]->[execute player command "/adminaddmute %arg 1% Advertising"]
+            format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+
+command /adminjail <offlinePlayer> [<boolean>]:
+    permission: group.moderator
+    trigger:
+        #need to wait here for close inv animation to finish from previous gui
+        wait 3 ticks
+
+        set {punishment_gui_%player%} to true
+
+        open chest with 1 row named "&4&l&nReason to Jail" to player
+        wait 1 tick
+        set {_jailslot} to 0
+        loop 9 times:
+            format slot {_jailslot} of player with gray stained glass pane named "&6" to be unstealable
+            add 1 to {_jailslot}
+        if arg-2 is true:
+            format slot 1 of player with snowball named "&6Portal/Claim Trapping" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 30m"]->[execute player command "/adminannounce %arg 1% jalied for Portal/ClaimTrapping"]->[execute player command "/adminaddjail %arg 1% Portal/ClaimTrapping"]
+            format slot 2 of player with snowball named "&615m Jail" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 15m"]->[execute player command "/adminannounce %arg 1% was jailed"]->[execute player command "/adminaddjail %arg 1% 15m"]
+            format slot 3 of player with snowball named "&630m Jail" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 30m"]->[execute player command "/adminannounce %arg 1% was jailed"]->[execute player command "/adminaddjail %arg 1% 30m"]
+            format slot 4 of player with snowball named "&660m Jail" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 60m"]->[execute player command "/adminannounce %arg 1% was jailed"]->[execute player command "/adminaddjail %arg 1% 60m"]
+            format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+        else:
+            format slot 1 of player with snowball named "&6Portal/Claim Trapping" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 30m"]->[execute player command "/adminaddjail %arg 1% Portal/ClaimTrapping"]
+            format slot 2 of player with snowball named "&615m Jail" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 15m"]->[execute player command "/adminaddjail %arg 1% 15m"]
+            format slot 3 of player with snowball named "&630m Jail" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 30m"]->[execute player command "/adminaddjail %arg 1% 30m"]
+            format slot 4 of player with snowball named "&660m Jail" to close then run [close player's inventory]->[execute player command "/jail %arg 1% spawnjail 60m"]->[execute player command "/adminaddjail %arg 1% 60m"]
+            format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+
+command /adminban <offlinePlayer> [<boolean>] [<text>]:
+    permission: group.moderator
+    trigger:
+        if arg-3 is "player":
+            wait 3 ticks
+
+            set {punishment_gui_%player%} to true
+
+            open chest with 1 row named "&4&l&nReason to Player Ban" to player
+            wait 1 tick
+            set {_muteslot} to 0
+            loop 9 times:
+                format slot {_muteslot} of player with gray stained glass pane named "&6" to be unstealable
+                add 1 to {_muteslot}
+
+		    # sends player to black, waits 3 seconds, bans player on red, add ban to player history, yes/no public ban
+		    # test this
+            if arg-2 is true:
+                format slot 1 of player with snowball named "&cX-ray" with lore "&47 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempbanplayer %arg 1% 7d Xray"]->[execute player command "/adminannounce %arg 1% temp banned for Xray"]->[execute player command "/adminaddban %arg 1% Xray"]
+                format slot 2 of player with snowball named "&cNon PvP Hacks" with lore "&414 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempbanplayer %arg 1% 14d 'Non PvP Hacks'"]->[execute player command "/adminannounce %arg 1% temp banned for Non PvP Hacks"]->[execute player command "/adminaddban %arg 1% 'Non PvP Hacks'"]
+                format slot 3 of player with snowball named "&cPvP Hacks" with lore "&430 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempbanplayer %arg 1% 30d 'PvP Hacks'"]->[execute player command "/adminannounce %arg 1% perm banned for PvP Hacks"]->[execute player command "/adminaddban %arg 1% 'PvP Hacks'"]
+                format slot 4 of player with snowball named "&cPerm Ban" with lore "&4For Second Offence" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/banplayer %arg 1% 'Multiple Offences'"]->[execute player command "/adminannounce %arg 1% has been perm banned"]->[execute player command "/adminaddban %arg 1% Perm Ban"]
+                format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+            else:
+                format slot 1 of player with snowball named "&cX-ray" with lore "&47 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempbanplayer %arg 1% 7d Xray"]->[execute player command "/adminaddban %arg 1% Xray"]
+                format slot 2 of player with snowball named "&cNon PvP Hacks" with lore "&414 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempbanplayer %arg 1% 14d 'Non PvP Hacks'"]->[execute player command "/adminaddban %arg 1% 'Non PvP Hacks'"]
+                format slot 3 of player with snowball named "&cPvP Hacks" with lore "&430 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempbanplayer %arg 1% 30d 'PvP Hacks'"]->[execute player command "/adminaddban %arg 1% 'PvP Hacks'"]
+                format slot 4 of player with snowball named "&cPerm Ban" with lore "&4For Second Offence" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/banplayer %arg 1% 'Multiple Offences'"]->[execute player command "/adminaddban %arg 1% Perm Ban"]
+                format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+        else if arg-3 is "ip":
+            wait 3 ticks
+
+            set {punishment_gui_%player%} to true
+
+            open chest with 1 row named "&4&l&nReason to IP Ban" to player
+            wait 1 tick
+            set {_muteslot} to 0
+            loop 9 times:
+                format slot {_muteslot} of player with gray stained glass pane named "&6" to be unstealable
+                add 1 to {_muteslot}
+
+		    # sends player to black, waits 3 seconds, bans player on red, add ban to player history, yes/no public ban
+		    # test this
+            if arg-2 is true:
+                format slot 1 of player with snowball named "&cX-ray" with lore "&47 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempipbanplayer %arg 1% 7d Xray"]->[execute player command "/adminannounce %arg 1% temp banned for Xray"]->[execute player command "/adminaddban %arg 1% IP Xray"]
+                format slot 2 of player with snowball named "&cNon PvP Hacks" with lore "&414 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempipbanplayer %arg 1% 14d 'Non PvP Hacks'"]->[execute player command "/adminannounce %arg 1% temp banned for Non PvP Hacks"]->[execute player command "/adminaddban %arg 1% 'IP Non PvP Hacks'"]
+                format slot 3 of player with snowball named "&cPvP Hacks" with lore "&430 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempipbanplayer %arg 1% 30d 'PvP Hacks'"]->[execute player command "/adminannounce %arg 1% perm banned for PvP Hacks"]->[execute player command "/adminaddban %arg 1% 'IP PvP Hacks'"]
+                format slot 4 of player with snowball named "&cPerm Ban" with lore "&4For Second Offence" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/banipplayer %arg 1% 'Multiple Offences'"]->[execute player command "/adminannounce %arg 1% has been perm banned"]->[execute player command "/adminaddban %arg 1% IP Perm Ban"]
+                format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+            else:
+                format slot 1 of player with snowball named "&cX-ray" with lore "&47 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempipbanplayer %arg 1% 7d Xray"]->[execute player command "/adminaddban %arg 1% IP Xray"]
+                format slot 2 of player with snowball named "&cNon PvP Hacks" with lore "&414 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempipbanplayer %arg 1% 14d 'Non PvP Hacks'"]->[execute player command "/adminaddban %arg 1% 'IP Non PvP Hacks'"]
+                format slot 3 of player with snowball named "&cPvP Hacks" with lore "&430 days" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/tempipbanplayer %arg 1% 30d 'PvP Hacks'"]->[execute player command "/adminaddban %arg 1% 'IP PvP Hacks'"]
+                format slot 4 of player with snowball named "&cPerm Ban" with lore "&4For Second Offence" to close then run [close player's inventory]->[execute player command "/adminsendtoblack %arg 1%"]->[execute player command "/banipplayer %arg 1% 'Multiple Offences'"]->[execute player command "/adminaddban %arg 1% IP Perm Ban"]
+                format slot 8 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+
+
+command /adminsendtoblack <offlinePlayer>:
+	permission: group.moderator
+	trigger:
+		make console execute command "lp user %arg-1% permission set group.banished"
+		send arg-1 to server "black"
+
+command /tempbanplayer <offlinePlayer> [<text>] [<text>]:
+	permission: group.moderator
+	trigger:
+		wait 3 seconds
+		execute player command "/tempban %arg 1% %arg 2% %arg 3%"
+
+command /banplayer <offlinePlayer> [<text>]:
+	permission: group.moderator
+	trigger:
+		wait 3 seconds
+		execute player command "/ban %arg 1% %arg 2%"
+
+command /tempipbanplayer <offlinePlayer> [<text>] [<text>]:
+	permission: group.moderator
+	trigger:
+		wait 3 seconds
+		execute player command "/tempipban %arg 1% %arg 2% %arg 3%"
+
+command /banipplayer <offlinePlayer> [<text>]:
+	permission: group.moderator
+	trigger:
+		wait 3 seconds
+		execute player command "/banip %arg 1% %arg 2%"
+
+
+
+# #######################################################################################################
+#                           PLAYER PUNISHMENT HISTORY GUI WINDOW                                        #
+# #######################################################################################################
+command /adminphistory <offlinePlayer> [<boolean>]:
+    permission: group.moderator
+    trigger:
+        #need to wait here for close inv animation to finish from previous gui
+        wait 3 ticks
+
+        set {punishment_gui_%player%} to true
+
+        open chest with 4 rows named "&4&l&nPlayer Punishment History" to player
+        wait 1 tick
+        set {_historyslot} to 0
+        loop 36 times:
+            format slot {_historyslot} of player with gray stained glass pane named "&6" to be unstealable
+            add 1 to {_historyslot}
+
+        format slot 0 of player with snowball named "&eMutes" with lore "&e%{countMutes_%arg 1%}%" to be unstealable
+        format slot 9 of player with snowball named "&6Jails" with lore "&6%{countJails_%arg 1%}%" to be unstealable
+        format slot 18 of player with snowball named "&cBans" with lore "&c%{countBans_%arg 1%}%" to be unstealable
+        format slot 31 of player with barrier named "&4Back" to close then run [close player's inventory]->[execute player command "/adminpunish %arg 1%"]
+        format slot 35 of player with emerald named "&aUnban %arg 1%" to close then run [close player's inventory]->[execute player command "/unban %arg 1%"]
+
+        # 8 most recent mutes with reason and date and staff who banned
+        set {_count1} to size of {mutes_%arg 1%::*}
+        set {_index1} to 1
+        loop {mutes_%arg 1%::*}:
+            format slot {_index1} of player with yellow wool named "&e%{mutes_%arg 1%::%{_count1}%}%" with lore "&e%{mutesDate_%arg 1%::%{_count1}%}%" and "&a%{mutesBy_%arg 1%::%{_count1}%}%" to be unstealable
+            remove 1 from {_count1}
+            add 1 to {_index1}
+            if {_index1} > 8:
+                exit 1 loop
+
+        # 8 most recent jails with reason and date and staff who banned
+        set {_count2} to size of {jails_%arg 1%::*}
+        set {_index2} to 10
+        loop {jails_%arg 1%::*}:
+            format slot {_index2} of player with orange wool named "&6%{jails_%arg 1%::%{_count2}%}%" with lore "&6%{jailsDate_%arg 1%::%{_count2}%}%" and "&a%{jailsBy_%arg 1%::%{_count2}%}%" to be unstealable
+            remove 1 from {_count2}
+            add 1 to {_index2}
+            if {_index2} > 17:
+                exit 1 loop
+
+        # 8 most recent bans with reason and date and staff who banned
+        set {_count3} to size of {bans_%arg 1%::*}
+        set {_index3} to 19
+        loop {bans_%arg 1%::*}:
+            format slot {_index3} of player with red wool named "&c%{bans_%arg 1%::%{_count3}%}%" with lore "&c%{bansDate_%arg 1%::%{_count3}%}%" and "&a%{bansBy_%arg 1%::%{_count3}%}%" to be unstealable
+            remove 1 from {_count3}
+            add 1 to {_index3}
+            if {_index3} > 26:
+                exit 1 loop
+
+command /adminaddmute <offlinePlayer> <text>:
+    permission: group.moderator
+    trigger:
+        if {countMutes_%arg 1%} is not set:
+            set {countMutes_%arg 1%} to 1
+        else:
+            add 1 to {countMutes_%arg 1%}
+        add arg-2 to {mutes_%arg 1%::*}
+        add now to {mutesDate_%arg 1%::*}
+        add player to {mutesBy_%arg 1%::*}
+        log "MUTE : %arg 1% muted by %player% for %arg 2%" to "LOGFOLDER/punishments.log"
+
+command /adminaddjail <offlinePlayer> <text>:
+    permission: group.moderator
+    trigger:
+        if {countJails_%arg 1%} is not set:
+            set {countJails_%arg 1%} to 1
+        else:
+            add 1 to {countJails_%arg 1%}
+        add arg-2 to {jails_%arg 1%::*}
+        add now to {jailsDate_%arg 1%::*}
+        add player to {jailsBy_%arg 1%::*}
+        log "JAIL : %arg 1% jailed by %player% for %arg 2%" to "LOGFOLDER/punishments.log"
+
+command /adminaddban <offlinePlayer> <text>:
+    permission: group.moderator
+    trigger:
+        if {countBans_%arg 1%} is not set:
+            set {countBans_%arg 1%} to 1
+        else:
+            add 1 to {countBans_%arg 1%}
+        add arg-2 to {bans_%arg 1%::*}
+        add now to {bansDate_%arg 1%::*}
+        add player to {bansBy_%arg 1%::*}
+        log "BAN : %arg 1% banned by %player% for %arg 2%" to "LOGFOLDER/punishments.log"
+
+# #######################################################################################################
+#                           Handles player's inventory while inside the GUI                             #
+# #######################################################################################################
+on inventory click:
+    if {punishment_gui_%player%} is true:
+        cancel event
+
+on inventory close:
+    set {punishment_gui_%player%} to false
