@@ -1,0 +1,41 @@
+on chat:
+	if player has permission "lootcraft.chat.emotes":
+		replace all ":star:" in message with "✮&f"
+		replace all ":<3:" in message with "&c❤&f"
+		replace all ":heart:" in message with "&c❤&f"
+		replace all ":yes:" in message with "&a✔&f"
+		replace all ":no:" in message with "&c✖&f"
+		replace all ":arrow:" in message with "➜"
+		replace all ":tableflip:" in message with "(╯°□°）╯ ┻━┻"
+		replace all ":o/:" in message with "( ﾟ◡ﾟ)/"
+		replace all ":123:" in message with "&a1&e2&c3&f"
+		replace all ":o_o:" in message with "☉_☉"
+		replace all ":typing:" in message with "&e✎&6...&f"
+		replace all ":snail:" in message with "&d@&a'&e-&a'&f"
+		replace all ":gimme:" in message with "༼つ◕_◕༽つ"
+		replace all ":pvp:" in message with "⚔"
+		replace all ":shrug:" in message with "¯\_(ツ)_/¯"
+
+command /emotes:
+	permission: lootcraft.chat.emotes
+	trigger:
+		open virtual chest inventory with size 2 named "&6&lLootCraft.net &7- &6&lEmotes" to player
+		format gui slot 0 of player with gray stained glass pane named "&6&lLootCraft.net &7- &6&lEmotes" to do nothing
+		format gui slot 8 of player with gray stained glass pane named "&6&lLootCraft.net &7- &6&lEmotes" to do nothing
+		format gui slot 9 of player with gray stained glass pane named "&6&lLootCraft.net &7- &6&lEmotes" to do nothing
+		format gui slot 17 of player with gray stained glass pane named "&6&lLootCraft.net &7- &6&lEmotes" to do nothing
+		format gui slot 1 of player with orange concrete named "&6✮" with lore "&7Send &7""&6&l:star:&7"" in" and "&7the chat to get a &7""&6✮&7""" to run console command "/force %player% :star:"
+		format gui slot 2 of player with red concrete named "&c❤" with lore "&7Send &7""&6&l:<3:&7"" in" and "&7the chat to get a &7""&c❤&7""" to run console command "/force %player% :<3:"
+		format gui slot 3 of player with lime concrete named "&a✔" with lore "&7Send &7""&6&l:yes:&7"" in" and "&7the chat to get a &7""&a✔&7""" to run console command "/force %player% :yes:"
+		format gui slot 4 of player with red concrete named "&c✖" with lore "&7Send &7""&6&l:no:&7"" in" and "&7the chat to get a &7""&c✖&7""" to run console command "/force %player% :no:"
+		format gui slot 5 of player with orange concrete named "&6➜" with lore "&7Send &7""&6&l:arrow:&7"" in" and "&7the chat to get a &7""&6➜&7""" to run console command "/force %player% :arrow:"
+		format gui slot 6 of player with orange concrete named "&6(╯°□°）╯ ┻━┻" with lore "&7Send &7""&6&l:tableflip:&7"" in" and "&7the chat to get a &7""&6(╯°□°）╯ ┻━┻&7""" to run console command "/force %player% :tableflip:"
+		format gui slot 7 of player with orange concrete named "&6( ﾟ◡ﾟ)/" with lore "&7Send &7""&6&l:o/:&7"" in" and "&7the chat to get a &7""&6( ﾟ◡ﾟ)/&7""" to run console command "/force %player% :o/:"
+		format gui slot 10 of player with yellow concrete named "&a1&e2&c3" with lore "&7Send &7""&6&l:123:&7"" in" and "&7the chat to get a &7""&6&a1&e2&c3&7""" to run console command "/force %player% :123:"
+		format gui slot 11 of player with orange concrete named "&6☉_☉" with lore "&7Send &7""&6&l:o_o:&7"" in" and "&7the chat to get a &7""&6☉_☉&7""" to run console command "/force %player% :o_o:"
+		format gui slot 12 of player with yellow concrete named "&e✎&6..." with lore "&7Send &7""&6&l:typing:&7"" in" and "&7the chat to get a &7""&6&e✎&6...&7""" to run console command "/force %player% :typing:"
+		format gui slot 13 of player with orange concrete named "&6⚔" with lore "&7Send &7""&6&l:pvp:&7"" in" and "&7the chat to get a &7""&6⚔&7""" to run console command "/force %player% :pvp:"
+		format gui slot 14 of player with magenta concrete named "&d@&a'&e-&a'" with lore "&7Send &7""&6&l:snail:&7"" in" and "&7the chat to get a &7""&6&d@&a'&e-&a'&7""" to run console command "/force %player% :snail:"
+		format gui slot 15 of player with orange concrete named "&6༼つ◕_◕༽つ" with lore "&7Send &7""&6&l:gimme:&7"" in" and "&7the chat to get a &7""&6༼つ◕_◕༽つ&7""" to run console command "/force %player% :gimme:"
+		format gui slot 16 of player with orange concrete named "&6¯\_(ツ)_/¯" with lore "&7Send &7""&6&l:shrug:&7"" in" and "&7the chat to get a &7""&6¯\_(ツ)_/¯&7""" to run console command "/force %player% :shrug:"
+

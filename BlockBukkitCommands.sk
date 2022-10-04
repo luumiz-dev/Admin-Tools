@@ -1,0 +1,185 @@
+#blocked commands
+command /? [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd ?"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bukkit:? [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bukkit:?"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /me [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd me"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /minecraft:me [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd minecraft:me"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /plugins [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd plugins"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bukkit:plugins [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bukkit:plugins"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bukkit:pl [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bukkit:pl"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /pl [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd pl"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bukkit:help [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bukkit:help"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bukkit:ver [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bukkit:ver"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bukkit:version [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bukkit:version"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /ver [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd ver"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /version [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd version"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /about [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd about"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bukkit:about [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bukkit:about"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bungee [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bungee"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /bungeetoggle [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd bungeetoggle"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /desti [<text>]:
+    trigger:
+        if player has permission "minecraft.command.op":
+            send "&aThis command is Hard Blocked.. You Are Bypassing .."
+            make player execute "/RunBlockedCmd desti"
+            wait 16 ticks
+            make player execute "/ConfCmdsBlkdAfterBypass"
+        else if player does not have permission "minecraft.command.op":
+            send "&cYou do not have access to this command."
+
+command /ConfCmdsBlkdAfterBypass:
+    permission: minecraft.command.op
+    trigger:
+        send "&aBlocking of Commands Reenabled"

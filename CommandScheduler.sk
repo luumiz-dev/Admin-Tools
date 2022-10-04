@@ -1,0 +1,24 @@
+command /commandschedulehelp [<text>] [<text>] [<offlineplayer>]:
+    permission: minecraft.command.op
+    trigger:
+        send "&c----- &4Command Schedule ----- "
+        send "&c/commandschedulehelp &f- Display this page"
+        send ""
+        send "&c/commandschedule [minutes] <console command...>"
+        send "&f- Run a given console command after [minutes]"
+        stop
+
+command /commandschedule [<text>] [<text>]:
+    permission: minecraft.command.op
+    trigger:
+        if arg-1 is not set:
+            make player execute "/commandschedulehelp"
+        if arg-1 is set:
+            if arg-2 is not set:
+                make player execute "/commandschedulehelp"
+            if arg-2 is set:
+                set {_sleepTime} to arg-1
+                send "&aCommand Scheduled"
+                wait "%{_sleepTime}% minutes" parsed as timespan
+                make console execute arg-2
+                send "&aCommand Scheduled has been executed"

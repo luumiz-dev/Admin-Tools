@@ -1,0 +1,17 @@
+command /getitemname:
+	permission: minecraft.command.op
+	trigger:
+		set {_itemname} to name of player's tool
+		send "&6Item Name: %{_itemname}%"
+
+command /getitemlore:
+	permission: minecraft.command.op
+	trigger:
+		set {_itemlore::*} to lore of player's tool
+		send "&6Item Lore: %{_itemlore::*}%"
+
+command /getitemenchants:
+	permission: minecraft.command.op
+	trigger:
+		set {_itemenchants::*} to enchantments of player's tool
+		send "&6Item Enchants: %{_itemenchants::*}%"
