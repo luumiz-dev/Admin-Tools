@@ -1,0 +1,49 @@
+on connect:
+    set {_isKicked} to false
+    if {%player's ip%::*} contains player's uuid:
+        set {_isKicked} to true
+
+    set {_CountOfPlayersAccount} to size of {%player's ip%::*}
+
+    #send "count: %{_CountOfPlayersAccount}%" to player
+    #send "list: %{%player's ip%::*}%" to player
+
+    if {_isKicked} is false:
+        if {_CountOfPlayersAccount} >= 3:
+            kick player due to "&6Sorry%newline%&bEach player is only allowed 2 accounts on the server.%newline%&bIf you think this is an error, contact an administrator on Discord.%newline%&bdiscord.gg/n4m2nFKvxz"
+            set {_isKicked} to true
+
+    if {_isKicked} is false:
+        if {_CountOfPlayersAccount} = 1:
+            execute console command "minecraft:tag %player% add alt"
+        else if {_CountOfPlayersAccount} = 2:
+            execute console command "minecraft:tag %player% add alt"
+
+    if {_isKicked} is false:
+        if {%player's ip%::*} does not contain player's uuid:
+            add player's uuid to {%player's ip%::*}
+        if {ListOfAllIPs::*} does not contain player's ip:
+            add player's ip to {ListOfAllIPs::*}
+
+    
+
+command /resetip [<text>]:
+    permission: minecraft.op
+    trigger:
+        if arg-1 is not set:
+            send "&6[Alt Detector] &7Usage: /resetip [ipAddress | all | help]"
+        else if arg-1 is "help":
+            send "&6[Alt Detector] &7/resetip all : reset all account lists for all ips"
+            send "&6[Alt Detector] &7/resetip ipAddress : reset account list for a single ip"
+        else if arg-1 is "all":
+            send "&6[Alt Detector] &7Clearing all IP logs..."
+            loop {ListOfAllIPs_altDetector::*}:
+                clear {%loop-value%::*}
+            send "&6[Alt Detector] &7Done."
+        else:
+            if {ListOfAllIPs::*} contains arg-1:
+                clear {%arg-1%::*}
+                send "&6[Alt Detector] &7Clearing IP logs for %arg-1%..."
+                send "&6[Alt Detector] &7Done."
+            else:
+                send "&6[Alt Detector] &7Usage: /resetip [ipAddress | all | help]"
